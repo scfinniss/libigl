@@ -38,28 +38,30 @@ namespace igl
     // Outputs:
     //   R       #F by 3 the representative vectors of the interpolated field
     //   S       #V by 1 the singularity index for each vertex (0 = regular)
+    template <typename Scalar, typename Index>
     IGL_INLINE void nrosy(
-      const Eigen::MatrixXd& V,
-      const Eigen::MatrixXi& F,
-      const Eigen::VectorXi& b,
-      const Eigen::MatrixXd& bc,
-      const Eigen::VectorXi& b_soft,
-      const Eigen::VectorXd& w_soft,
-      const Eigen::MatrixXd& bc_soft,
+      const Eigen::Matrix<Scalar, Eigen::Dynamic, 3>& V,
+      const Eigen::Matrix<Index, Eigen::Dynamic, 3>& F,
+      const Eigen::Matrix<Index, Eigen::Dynamic, 1>& b,
+      const Eigen::Matrix<Scalar, Eigen::Dynamic, 3>& bc,
+      const Eigen::Matrix<Scalar, Eigen::Dynamic, 1>& b_soft,
+      const Eigen::Matrix<Scalar, Eigen::Dynamic, 1>& w_soft,
+      const Eigen::Matrix<Scalar, Eigen::Dynamic, 3>& bc_soft,
       const int N,
       const double soft,
-      Eigen::MatrixXd& R,
-      Eigen::VectorXd& S
+      Eigen::Matrix<Scalar, Eigen::Dynamic, 3>& R,
+      Eigen::Matrix<Scalar, Eigen::Dynamic, 1>& S
       );
     //wrapper for the case without soft constraints
+    template <typename Scalar, typename Index>
     IGL_INLINE void nrosy(
-     const Eigen::MatrixXd& V,
-     const Eigen::MatrixXi& F,
-     const Eigen::VectorXi& b,
-     const Eigen::MatrixXd& bc,
+     const Eigen::Matrix<Scalar, Eigen::Dynamic, 3>& V,
+     const Eigen::Matrix<Index, Eigen::Dynamic, 3>& F,
+     const Eigen::Matrix<Index, Eigen::Dynamic, 1>& b,
+     const Eigen::Matrix<Scalar, Eigen::Dynamic, 3>& bc,
      const int N,
-     Eigen::MatrixXd& R,
-     Eigen::VectorXd& S
+     Eigen::Matrix<Scalar, Eigen::Dynamic, 3>& R,
+     Eigen::Matrix<Scalar, Eigen::Dynamic, 1>& S
       );
 
   }

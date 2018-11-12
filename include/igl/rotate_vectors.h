@@ -25,11 +25,12 @@ namespace igl
   // Output:
   //   Returns the rotated vectors
   //
-  IGL_INLINE Eigen::MatrixXd rotate_vectors(
-                                            const Eigen::MatrixXd& V,
-                                            const Eigen::VectorXd& A,
-                                            const Eigen::MatrixXd& B1,
-                                            const Eigen::MatrixXd& B2);
+  template <typename Scalar>
+  IGL_INLINE Eigen::Matrix<Scalar, Eigen::Dynamic, 3> rotate_vectors(
+                                            const Eigen::Matrix<Scalar, Eigen::Dynamic, 3> V,
+                                            const Eigen::Matrix<Scalar, 1, Eigen::Dynamic>& A,
+                                            const Eigen::Matrix<Scalar, Eigen::Dynamic, 3> B1,
+                                            const Eigen::Matrix<Scalar, Eigen::Dynamic, 3> B2);
 
 }
 

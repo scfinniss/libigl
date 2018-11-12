@@ -37,14 +37,15 @@ namespace comiso
 //   FF2      #F by 3 the second representative vector of the frame field (up to permutation and sign)
 //
 // TODO: it now supports only soft constraints, should be extended to support both hard and soft constraints
+template <typename Scalar, typename Index>
 IGL_INLINE void frame_field(
-  const Eigen::MatrixXd& V,
-  const Eigen::MatrixXi& F,
-  const Eigen::VectorXi& b,
-  const Eigen::MatrixXd& bc1,
-  const Eigen::MatrixXd& bc2,
-  Eigen::MatrixXd& FF1,
-  Eigen::MatrixXd& FF2
+  const Eigen::Matrix<Scalar, Eigen::Dynamic, 3>& V,
+  const Eigen::Matrix<Index, Eigen::Dynamic, 3>& F,
+  const Eigen::Matrix<Index, Eigen::Dynamic, 1>& b,
+  const Eigen::Matrix<Scalar, Eigen::Dynamic, 3>& bc1,
+  const Eigen::Matrix<Scalar, Eigen::Dynamic, 3>& bc2,
+  Eigen::Matrix<Scalar, Eigen::Dynamic, 3>& FF1,
+  Eigen::Matrix<Scalar, Eigen::Dynamic, 3>& FF2
   );
 }
 }

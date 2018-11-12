@@ -666,8 +666,8 @@ void igl::copyleft::comiso::NRosyField::computek()
 
       tmp = R2*ref0.head<2>();
 
-      assert(tmp(0) - ref1(0) < 10^10);
-      assert(tmp(1) - ref1(1) < 10^10);
+      assert((tmp(0) - ref1(0) < 10)^10);
+      assert((tmp(1) - ref1(1) < 10)^10);
 
       k[eid] = ktemp;
     }
@@ -874,30 +874,31 @@ Eigen::VectorXd igl::copyleft::comiso::NRosyField::getSingularityIndexPerVertex(
   return singularityIndex;
 }
 
+template <typename Scalar, typename Index>
 IGL_INLINE void igl::copyleft::comiso::nrosy(
-  const Eigen::MatrixXd& V,
-  const Eigen::MatrixXi& F,
-  const Eigen::VectorXi& b,
-  const Eigen::MatrixXd& bc,
-  const Eigen::VectorXi& b_soft,
-  const Eigen::VectorXd& w_soft,
-  const Eigen::MatrixXd& bc_soft,
-  const int N,
-  const double soft,
-  Eigen::MatrixXd& R,
-  Eigen::VectorXd& S
+        const Eigen::Matrix<Scalar, Eigen::Dynamic, 3>& V,
+        const Eigen::Matrix<Index, Eigen::Dynamic, 3>& F,
+        const Eigen::Matrix<Index, Eigen::Dynamic, 1>& b,
+        const Eigen::Matrix<Scalar, Eigen::Dynamic, 3>& bc,
+        const Eigen::Matrix<Scalar, Eigen::Dynamic, 1>& b_soft,
+        const Eigen::Matrix<Scalar, Eigen::Dynamic, 1>& w_soft,
+        const Eigen::Matrix<Scalar, Eigen::Dynamic, 3>& bc_soft,
+        const int N,
+        const double soft,
+        Eigen::Matrix<Scalar, Eigen::Dynamic, 3>& R,
+        Eigen::Matrix<Scalar, Eigen::Dynamic, 1>& S
   )
 {
   // Init solver
-  igl::copyleft::comiso::NRosyField solver(V,F);
+  igl::copyleft::comiso::NRosyField solver(V.template cast<double>(),F.template cast<int>());
 
   // Add hard constraints
   for (unsigned i=0; i<b.size();++i)
-    solver.setConstraintHard(b(i),bc.row(i));
+    solver.setConstraintHard((int)b(i),bc.row(i).template cast<double>());
 
   // Add soft constraints
   for (unsigned i=0; i<b_soft.size();++i)
-    solver.setConstraintSoft(b_soft(i),w_soft(i),bc_soft.row(i));
+    solver.setConstraintSoft((double)b_soft(i),(double)w_soft(i),bc_soft.row(i).template cast<double>());
 
   // Set the soft constraints global weight
   solver.setSoftAlpha(soft);
@@ -906,36 +907,36 @@ IGL_INLINE void igl::copyleft::comiso::nrosy(
   solver.solve(N);
 
   // Copy the result back
-  R = solver.getFieldPerFace();
+  R = solver.getFieldPerFace().template cast<Scalar>();
 
   // Extract singularity indices
-  S = solver.getSingularityIndexPerVertex();
+  S = solver.getSingularityIndexPerVertex().template cast<Scalar>();
 }
 
-
+template <typename Scalar, typename Index>
 IGL_INLINE void igl::copyleft::comiso::nrosy(
-                           const Eigen::MatrixXd& V,
-                           const Eigen::MatrixXi& F,
-                           const Eigen::VectorXi& b,
-                           const Eigen::MatrixXd& bc,
-                           const int N,
-                           Eigen::MatrixXd& R,
-                           Eigen::VectorXd& S
+        const Eigen::Matrix<Scalar, Eigen::Dynamic, 3>& V,
+        const Eigen::Matrix<Index, Eigen::Dynamic, 3>& F,
+        const Eigen::Matrix<Index, Eigen::Dynamic, 1>& b,
+        const Eigen::Matrix<Scalar, Eigen::Dynamic, 3>& bc,
+        const int N,
+        Eigen::Matrix<Scalar, Eigen::Dynamic, 3>& R,
+        Eigen::Matrix<Scalar, Eigen::Dynamic, 1>& S
                            )
 {
   // Init solver
-  igl::copyleft::comiso::NRosyField solver(V,F);
+  igl::copyleft::comiso::NRosyField solver(V.template cast<double>(),F.template cast<int>());
 
   // Add hard constraints
   for (unsigned i=0; i<b.size();++i)
-    solver.setConstraintHard(b(i),bc.row(i));
+    solver.setConstraintHard((int)b(i),bc.row(i).template cast<double>());
 
   // Interpolate
   solver.solve(N);
 
   // Copy the result back
-  R = solver.getFieldPerFace();
+  R = solver.getFieldPerFace().template cast<Scalar>();
 
   // Extract singularity indices
-  S = solver.getSingularityIndexPerVertex();
+  S = solver.getSingularityIndexPerVertex().template cast<Scalar>();
 }

@@ -8,7 +8,7 @@
 #include "igl/dot_row.h"
 
 template <typename DerivedV>
-IGL_INLINE DerivedV igl::dot_row(
+IGL_INLINE Eigen::Matrix<typename DerivedV::Scalar, Eigen::Dynamic, 1> igl::dot_row(
   const Eigen::PlainObjectBase<DerivedV>& A,
   const Eigen::PlainObjectBase<DerivedV>& B
   )

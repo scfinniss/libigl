@@ -23,12 +23,14 @@ namespace igl
   // Outputs:
   //   X       #F by 3 representative vector of the closest cross field
   //
+
+  template <typename DerivedV, typename DerivedF>
   IGL_INLINE void frame_to_cross_field(
-    const Eigen::MatrixXd& V,
-    const Eigen::MatrixXi& F,
-    const Eigen::MatrixXd& FF1,
-    const Eigen::MatrixXd& FF2,
-    Eigen::MatrixXd& X);
+          const Eigen::PlainObjectBase<DerivedV>& V,
+          const Eigen::PlainObjectBase<DerivedF>& F,
+          const Eigen::PlainObjectBase<DerivedV>& FF1,
+          const Eigen::PlainObjectBase<DerivedV>& FF2,
+          Eigen::PlainObjectBase<DerivedV>& X);
 
 }
 

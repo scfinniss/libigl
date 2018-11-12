@@ -23,7 +23,7 @@ namespace igl
   //   d a column vector with r entries that contains the dot product of each corresponding row of A and B
   //
   template <typename DerivedV>
-  IGL_INLINE DerivedV dot_row(
+  IGL_INLINE Eigen::Matrix<typename DerivedV::Scalar, Eigen::Dynamic, 1> dot_row(
     const Eigen::PlainObjectBase<DerivedV>& A,
     const Eigen::PlainObjectBase<DerivedV>& B);
 

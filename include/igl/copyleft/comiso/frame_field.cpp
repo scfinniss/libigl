@@ -93,8 +93,8 @@ private:
   Eigen::VectorXd k;
 
   // Mesh
-  Eigen::MatrixXd V;
-  Eigen::MatrixXi F;
+  Eigen::Matrix<double, Eigen::Dynamic, 3> V;
+  Eigen::Matrix<int, Eigen::Dynamic, 3> F;
 
   // Normals per face
   Eigen::MatrixXd N;
@@ -216,10 +216,12 @@ void FrameInterpolator::interpolateCross()
   // MatrixXd R = nrosy.getFieldPerFace();
 
   //olga: is
-  Eigen::MatrixXd R;
-  Eigen::VectorXd S;
-  Eigen::VectorXi b; b.resize(F.rows(),1);
-  Eigen::MatrixXd bc; bc.resize(F.rows(),3);
+  Eigen::Matrix<double, Eigen::Dynamic, 3> R;
+  Eigen::Matrix<double, Eigen::Dynamic, 1> S;
+  Eigen::Matrix<int, Eigen::Dynamic, 1> b;
+  b.resize(F.rows(),1);
+  Eigen::Matrix<double, Eigen::Dynamic, 3> bc;
+  bc.resize(F.rows(),3);
   int num = 0;
   for (unsigned i=0; i<F.rows(); ++i)
     if(thetas_c[i])
@@ -653,14 +655,15 @@ Eigen::MatrixXd FrameInterpolator::getFieldPerFace()
 }
 }
 
+template <typename Scalar, typename Index>
 IGL_INLINE void igl::copyleft::comiso::frame_field(
-                                 const Eigen::MatrixXd& V,
-                                 const Eigen::MatrixXi& F,
-                                 const Eigen::VectorXi& b,
-                                 const Eigen::MatrixXd& bc1,
-                                 const Eigen::MatrixXd& bc2,
-                                 Eigen::MatrixXd& FF1,
-                                 Eigen::MatrixXd& FF2
+        const Eigen::Matrix<Scalar, Eigen::Dynamic, 3>& V,
+        const Eigen::Matrix<Index, Eigen::Dynamic, 3>& F,
+        const Eigen::Matrix<Index, Eigen::Dynamic, 1>& b,
+        const Eigen::Matrix<Scalar, Eigen::Dynamic, 3>& bc1,
+        const Eigen::Matrix<Scalar, Eigen::Dynamic, 3>& bc2,
+        Eigen::Matrix<Scalar, Eigen::Dynamic, 3>& FF1,
+        Eigen::Matrix<Scalar, Eigen::Dynamic, 3>& FF2
                                  )
 
 {
@@ -670,19 +673,19 @@ IGL_INLINE void igl::copyleft::comiso::frame_field(
   assert(b.size() > 0);
 
   // Init Solver
-  FrameInterpolator field(V,F);
+  FrameInterpolator field(V.template cast<double>(),F.template cast<int>());
 
   for (unsigned i=0; i<b.size(); ++i)
   {
-    VectorXd t(6); t << bc1.row(i).transpose(), bc2.row(i).transpose();
-    field.setConstraint(b(i), t);
+    VectorXd t(6); t << bc1.row(i).transpose().template cast<double>(), bc2.row(i).transpose().template cast<double>();
+    field.setConstraint((int)b(i), t);
   }
 
   // Solve
   field.solve();
 
   // Copy back
-  MatrixXd R = field.getFieldPerFace();
+  Eigen::Matrix<Scalar, Eigen::Dynamic, Eigen::Dynamic> R = field.getFieldPerFace().template cast<Scalar>();
   FF1 = R.block(0, 0, R.rows(), 3);
   FF2 = R.block(0, 3, R.rows(), 3);
 }

@@ -7,13 +7,14 @@
 // obtain one at http://mozilla.org/MPL/2.0/.
 
 #include "rotate_vectors.h"
-IGL_INLINE Eigen::MatrixXd igl::rotate_vectors(
-                    const Eigen::MatrixXd& V,
-                    const Eigen::VectorXd& A,
-                    const Eigen::MatrixXd& B1,
-                    const Eigen::MatrixXd& B2)
+template <typename Scalar>
+IGL_INLINE Eigen::Matrix<Scalar, Eigen::Dynamic, 3> igl::rotate_vectors(
+        const Eigen::Matrix<Scalar, Eigen::Dynamic, 3> V,
+        const Eigen::Matrix<Scalar, 1, Eigen::Dynamic>& A,
+        const Eigen::Matrix<Scalar, Eigen::Dynamic, 3> B1,
+        const Eigen::Matrix<Scalar, Eigen::Dynamic, 3> B2)
 {
-  Eigen::MatrixXd RV(V.rows(),V.cols());
+  Eigen::Matrix<Scalar, Eigen::Dynamic, 3> RV(V.rows(), 3);
 
   for (unsigned i=0; i<V.rows();++i)
   {
