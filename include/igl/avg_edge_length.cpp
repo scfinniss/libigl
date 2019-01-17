@@ -11,7 +11,7 @@
 #include <vector>
 
 template <typename DerivedV, typename DerivedF>
-IGL_INLINE double igl::avg_edge_length(
+IGL_INLINE typename DerivedV::Scalar igl::avg_edge_length(
   const Eigen::MatrixBase<DerivedV>& V,
   const Eigen::MatrixBase<DerivedF>& F)
 {
@@ -27,7 +27,7 @@ IGL_INLINE double igl::avg_edge_length(
     avg += (V.row(E(i,0)) - V.row(E(i,1))).norm();
   }
 
-  return avg / (double) E.rows();
+  return avg / (typename DerivedV::Scalar) E.rows();
 }
 
 #ifdef IGL_STATIC_LIBRARY
